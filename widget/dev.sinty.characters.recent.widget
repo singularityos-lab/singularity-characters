@@ -1,0 +1,8 @@
+[Widget]
+Id=characters.recent
+ProviderId=dev.sinty.characters
+Name=Recent Characters
+IconName=dev.sinty.characters
+Sizes=2x1;2x2;4x1
+Module=libsingularity-characters-widget.so
+ModuleSymbol=singularity_characters_widget_new

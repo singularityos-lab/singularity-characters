@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/dev/sinty/characters">
+    <file compressed="true">characters.tsv</file>
+  </gresource>
+  <gresource prefix="/dev/sinty/characters/icons/scalable/actions">
+    <file alias="characters-arrows-symbolic.svg" preprocess="xml-stripblanks">symbolic/characters-arrows-symbolic.svg</file>
+    <file alias="characters-currency-symbolic.svg" preprocess="xml-stripblanks">symbolic/characters-currency-symbolic.svg</file>
+    <file alias="characters-cyrillic-symbolic.svg" preprocess="xml-stripblanks">symbolic/characters-cyrillic-symbolic.svg</file>
+    <file alias="characters-greek-symbolic.svg" preprocess="xml-stripblanks">symbolic/characters-greek-symbolic.svg</file>
+    <file alias="characters-latin-symbolic.svg" preprocess="xml-stripblanks">symbolic/characters-latin-symbolic.svg</file>
+    <file alias="characters-letterlike-symbolic.svg" preprocess="xml-stripblanks">symbolic/characters-letterlike-symbolic.svg</file>
+    <file alias="characters-math-symbolic.svg" preprocess="xml-stripblanks">symbolic/characters-math-symbolic.svg</file>
+    <file alias="characters-punctuation-symbolic.svg" preprocess="xml-stripblanks">symbolic/characters-punctuation-symbolic.svg</file>
+    <file alias="characters-technical-symbolic.svg" preprocess="xml-stripblanks">symbolic/characters-technical-symbolic.svg</file>
+  </gresource>
+</gresources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="dev.sinty.characters" path="/dev/sinty/characters/">
+    <key name="recent" type="as">
+      <default>[]</default>
+      <summary>Recently used characters</summary>
+      <description>Characters copied most recently, newest first.</description>
+    </key>
+  </schema>
+</schemalist>

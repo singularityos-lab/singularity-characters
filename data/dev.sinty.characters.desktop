@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=Characters
+Comment=Find and copy special characters and emoji
+Exec=singularity-characters
+Icon=dev.sinty.characters
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=emoji;character;symbol;unicode;arrow;math;currency;accent;glyph;
+StartupWMClass=dev.sinty.characters
+Actions=recent;
+
+[Desktop Action recent]
+Name=Recently Used
+Exec=singularity-characters --recent
