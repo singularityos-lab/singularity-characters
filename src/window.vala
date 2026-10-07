@@ -391,6 +391,12 @@ namespace Singularity.Apps.Characters {
             copy_code.add_css_class ("flat");
             copy_code.clicked.connect (() => copy_shown_code ());
             panel.append (copy_code);
+            var share_button = new Button.with_label (_("Share…"));
+            share_button.add_css_class ("flat");
+            share_button.clicked.connect (() => {
+                if (shown != null) Singularity.Share.text ((Gtk.Window) get_root (), shown.text, _("Character"));
+            });
+            panel.append (share_button);
             outer.append (panel);
             return outer;
         }
