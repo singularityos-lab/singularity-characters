@@ -30,6 +30,7 @@ namespace Singularity.Apps.Characters {
         protected override void startup () {
             base.startup ();
             settings = new GLib.Settings ("dev.sinty.characters");
+            CharactersIntents.install (this);
             IconTheme.get_for_display (Gdk.Display.get_default ()).add_resource_path ("/dev/sinty/characters/icons");
             var provider = new CssProvider ();
             provider.load_from_string (CSS);

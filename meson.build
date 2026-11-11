@@ -28,7 +28,7 @@ resources = gnome.compile_resources(
 )
 
 executable('singularity-characters',
-  files('src/database.vala', 'src/search.vala', 'src/app.vala', 'src/window.vala') + [resources],
+  files('src/database.vala', 'src/search.vala', 'src/agent_intents.vala', 'src/app.vala', 'src/window.vala') + [resources],
   dependencies: [gtk_dep, gee_dep, libsingularity_dep],
   install: true
 )
