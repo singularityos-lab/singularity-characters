@@ -12,6 +12,7 @@ namespace Singularity.Apps.Characters {
 
         private CharactersApp app;
         private Database db;
+        private Gee.HashMap<string, bool> glyphs = new Gee.HashMap<string, bool> ();
         private AppSidebar sidebar;
         private Gee.HashMap<string, SidebarRow> rows = new Gee.HashMap<string, SidebarRow> ();
         private string current = "smileys";
@@ -269,6 +270,15 @@ namespace Singularity.Apps.Characters {
             return "";
         }
 
+        private bool drawable (CharItem item) {
+            if (item.is_emoji) return true;
+            if (glyphs.has_key (item.text)) return glyphs[item.text];
+            var layout = create_pango_layout (item.text);
+            bool ok = layout.get_unknown_glyphs_count () == 0;
+            glyphs[item.text] = ok;
+            return ok;
+        }
+
         private void refresh () {
             foreach (var entry in rows.entries) entry.value.set_active (query == "" && entry.key == current);
             Gee.List<CharItem> items;
@@ -288,6 +298,14 @@ namespace Singularity.Apps.Characters {
                 items = db.category (current);
                 title.label = label_for (current);
                 subtitle.label = ngettext ("%d character", "%d characters", items.size).printf (items.size);
+            }
+            if (current != "recent" || query.strip () != "") {
+                var shown = new Gee.ArrayList<CharItem> ();
+                foreach (var item in items) if (drawable (item)) shown.add (item);
+                if (shown.size != items.size) {
+                    items = shown;
+                    if (query.strip () == "") subtitle.label = ngettext ("%d character", "%d characters", items.size).printf (items.size);
+                }
             }
             selection.selected = Gtk.INVALID_LIST_POSITION;
             store.remove_all ();
