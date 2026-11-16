@@ -6,6 +6,7 @@ Icon=dev.sinty.characters
 Terminal=false
 Type=Application
 Categories=Utility;
+X-Sinty-FormFactors=desktop;tablet;phone
 Keywords=emoji;character;symbol;unicode;arrow;math;currency;accent;glyph;
 StartupWMClass=dev.sinty.characters
 Actions=recent;
