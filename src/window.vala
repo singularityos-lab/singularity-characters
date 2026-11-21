@@ -24,7 +24,7 @@ namespace Singularity.Apps.Characters {
         private Box header;
         private Label title;
         private Label subtitle;
-        private Revealer panel_revealer;
+        private Singularity.Widgets.DetailPane pane;
         private Label hero;
         private Label char_name;
         private Label char_code;
@@ -134,13 +134,16 @@ namespace Singularity.Apps.Characters {
             stack.add_named (empty, "empty");
             stack.add_named (build_recent_empty (), "recent-empty");
             main.append (stack);
-            content.append (main);
+            pane = new Singularity.Widgets.DetailPane (main);
+            pane.hexpand = true;
+            pane.panel_width = 316;
+            content.append (pane);
 
-            panel_revealer = new Revealer ();
-            panel_revealer.transition_type = RevealerTransitionType.SLIDE_LEFT;
-            panel_revealer.child = build_panel ();
-            panel_revealer.reveal_child = false;
-            content.append (panel_revealer);
+            pane.set_panel (build_panel ());
+            pane.attach_back_bubble (this);
+            pane.panel_closed.connect (() => {
+                if (selection.selected != Gtk.INVALID_LIST_POSITION) selection.selected = Gtk.INVALID_LIST_POSITION;
+            });
 
             set_content (content);
 
@@ -341,7 +344,6 @@ namespace Singularity.Apps.Characters {
 
         private Widget build_panel () {
             var outer = new Box (Orientation.VERTICAL, 0);
-            outer.set_size_request (300, -1);
             outer.margin_end = 16;
             outer.margin_bottom = 16;
             Singularity.Widgets.apply_view_edge (outer);
@@ -422,7 +424,7 @@ namespace Singularity.Apps.Characters {
         private void on_selected () {
             var item = selection.selected_item as CharItem;
             if (item == null) {
-                panel_revealer.reveal_child = false;
+                pane.reveal_panel = false;
                 shown = null;
                 sync_item_actions ();
                 return;
@@ -457,7 +459,7 @@ namespace Singularity.Apps.Characters {
             if (pair != null) {
                 case_button.label = pair.text.up () == pair.text ? _("Uppercase: %s").printf (pair.text) : _("Lowercase: %s").printf (pair.text);
             }
-            panel_revealer.reveal_child = true;
+            pane.reveal_panel = true;
         }
 
         private void copy (CharItem item) {
