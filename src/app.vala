@@ -2,7 +2,7 @@ using Gtk;
 
 namespace Singularity.Apps.Characters {
 
-    public class CharactersApp : Singularity.Application, Singularity.Migration.Migratable {
+    public class CharactersApp : Singularity.Application, Singularity.Migration.Migratable, Singularity.Startup.Bootable {
         public GLib.Settings settings { get; private set; }
         private bool recent_pending;
 
@@ -118,7 +118,30 @@ namespace Singularity.Apps.Characters {
             return window;
         }
 
-        public override void activate () {
+        public Singularity.Startup.Plan build_plan (Singularity.Startup.Request request) {
+            var plan = new Singularity.Startup.Plan ();
+            plan.version = "characters-1";
+            if (request.kind == Singularity.Startup.RequestKind.SERVICE) {
+                plan.main ("ready", Singularity.Startup.Category.PREPARE, (c) => {})
+                    .reaches (Singularity.Startup.Milestone.SHELL_READY)
+                    .reaches (Singularity.Startup.Milestone.CONTENT_READY)
+                    .reaches (Singularity.Startup.Milestone.INTERACTIVE);
+                return plan;
+            }
+            plan.main ("window", Singularity.Startup.Category.SHELL, (c) => {
+                show_window ();
+                c.window = get_active_window ();
+            }).reaches (Singularity.Startup.Milestone.SHELL_READY)
+              .reaches (Singularity.Startup.Milestone.CONTENT_READY)
+              .reaches (Singularity.Startup.Milestone.INTERACTIVE);
+            return plan;
+        }
+
+        public void handle_request (Singularity.Startup.Request request) {
+            show_window ();
+        }
+
+        private void show_window () {
             var window = ensure_window ();
             if (recent_pending) {
                 recent_pending = false;
