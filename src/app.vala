@@ -2,7 +2,7 @@ using Gtk;
 
 namespace Singularity.Apps.Characters {
 
-    public class CharactersApp : Singularity.Application {
+    public class CharactersApp : Singularity.Application, Singularity.Migration.Migratable {
         public GLib.Settings settings { get; private set; }
         private bool recent_pending;
 
@@ -124,6 +124,34 @@ namespace Singularity.Apps.Characters {
                 recent_pending = false;
                 ((GLib.ActionGroup) window).activate_action ("category", new Variant.string ("recent"));
             }
+        }
+
+        public Variant save_model () {
+            var d = new VariantDict ();
+            d.insert_value ("recent", new Variant.strv (recent ()));
+            return d.end ();
+        }
+
+        public async void restore_model (Variant model) throws Error {
+            var list = new VariantDict (model).lookup_value ("recent", VariantType.STRING_ARRAY);
+            if (list == null) return;
+            string[] moved = list.get_strv ();
+            for (int i = moved.length - 1; i >= 0; i--) add_recent (moved[i]);
+        }
+
+        public string window_kind (Gtk.Window w) {
+            return (w is CharactersWindow) ? "characters" : "";
+        }
+
+        public Variant save_window (Gtk.Window w) {
+            return ((CharactersWindow) w).save_migration ();
+        }
+
+        public async Gtk.Window? rebuild_window (string kind, Variant data) throws Error {
+            if (kind != "characters") return null;
+            var window = new CharactersWindow (this);
+            window.restore_migration (data);
+            return window;
         }
 
         public void show_character (CharItem item) {

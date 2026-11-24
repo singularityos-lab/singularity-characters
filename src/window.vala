@@ -52,6 +52,7 @@ namespace Singularity.Apps.Characters {
             set_sidebar_visible (true);
 
             search = add_bubble_search (_("Search Characters"), (text) => {
+                if (text == query) return;
                 query = text;
                 refresh ();
             });
@@ -239,6 +240,30 @@ namespace Singularity.Apps.Characters {
         public void reveal (CharItem item) {
             pending_reveal = item;
             search_for (item.text);
+        }
+
+        public Variant save_migration () {
+            var d = new VariantDict ();
+            d.insert_value ("category", new Variant.string (current));
+            d.insert_value ("query", new Variant.string (query));
+            if (shown != null) d.insert_value ("character", new Variant.string (shown.text));
+            return d.end ();
+        }
+
+        public void restore_migration (Variant data) {
+            var d = new VariantDict (data);
+            var category = d.lookup_value ("category", VariantType.STRING);
+            if (category != null && rows.has_key (category.get_string ())) current = category.get_string ();
+            var text = d.lookup_value ("query", VariantType.STRING);
+            search_for (text != null ? text.get_string () : "");
+            var character = d.lookup_value ("character", VariantType.STRING);
+            if (character == null) return;
+            for (uint i = 0; i < store.get_n_items (); i++) {
+                if (((CharItem) store.get_item (i)).text == character.get_string ()) {
+                    selection.selected = i;
+                    return;
+                }
+            }
         }
 
         private void select_pending () {
